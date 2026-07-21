@@ -28,9 +28,9 @@ import tools.vitruv.change.correspondence.Correspondence;
 import tools.vitruv.change.correspondence.model.PersistableCorrespondenceModel;
 import tools.vitruv.change.correspondence.view.CorrespondenceModelViewFactory;
 import tools.vitruv.change.correspondence.view.EditableCorrespondenceModelView;
-import tools.vitruv.change.propagation.ModelRepositorySnapshot;
+import tools.vitruv.change.propagation.ModelSnapshot;
 import tools.vitruv.change.propagation.TransactionalChangeWithPreviousState;
-import tools.vitruv.change.propagation.impl.DefaultModelRepositorySnapshot;
+import tools.vitruv.change.propagation.impl.DefaultModelSnapshot;
 import tools.vitruv.change.propagation.impl.ResourceRegistrationAdapter;
 import tools.vitruv.framework.vsum.helper.VsumFileSystemLayout;
 import tools.vitruv.framework.vsum.internal.messages.InfoMessages;
@@ -204,8 +204,8 @@ class ResourceRepositoryImpl implements ModelRepository {
   }
 
   @Override
-  public ModelRepositorySnapshot createSnapshot() {
-    return DefaultModelRepositorySnapshot.copyOf(modelsResourceSet, this::getMetadataModelURI);
+  public ModelSnapshot createSnapshot() {
+    return DefaultModelSnapshot.copyOf(modelsResourceSet, this::getMetadataModelURI);
   }
 
   @Override
@@ -213,7 +213,7 @@ class ResourceRepositoryImpl implements ModelRepository {
     List<TransactionalChangeWithPreviousState> result = new ArrayList<>();
 
     for (TransactionalChange<Uuid> transactionalChange : change.getTransactionalChangeSequence()) {
-      ModelRepositorySnapshot previousState = createSnapshot();
+      ModelSnapshot previousState = createSnapshot();
 
       try {
         var resolvedTransactionalChange = (TransactionalChange<EObject>) changeResolver.resolveAndApply(transactionalChange);
